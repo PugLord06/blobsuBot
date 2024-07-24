@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class osu extends ListenerAdapter {
-    
+
     // rxMania, and all autopilot gamemodes apart from standard are unused
     private final String[] gamemodes = new String[]{"std", "taiko", "ctb", "mania", "rxStd", "rxTaiko"
             , "rxCatch", "rxMania", "autoStd", "autoTaiko", "autoCatch", "autoMania"};
@@ -101,14 +101,15 @@ public class osu extends ListenerAdapter {
                                     .setAuthor(String.format("osu!%s profile for ", modeName) + playerInfo.getName(), userURL, flagAPI)
                                     .setUrl(userURL)
                                     .setDescription(
-                                            String.format("- **Rank:** %o (%s#%o) \n" +
-                                                            "- **PP:** %opp **Acc:** %.2f%%\n" +
-                                                            "- **Playcount:** %o (%o hrs) \n"
+                                            String.format("- **Rank:** %d (%s#%d) \n" +
+                                                            "- **PP:** %d pp **Acc:** %.2f%%\n" +
+                                                            "- **Playcount:** %d (%d hrs) \n"
                                                     , modeStats.getRank(), playerInfo.getCountry().toUpperCase(), modeStats.getCountryRank()
                                                     , modeStats.getPp(), modeStats.getAcc(), modeStats.getPlays(), playTime).replace(",", "."))
                                     .setTimestamp(Instant.ofEpochMilli(Long.parseLong(userLastSeen)))
                                     .setFooter("Last Seen ",
                                             "https://cdn.discordapp.com/attachments/1257066623899144323/1257686870322843812/discordidk.png?ex=66a0566c&is=669f04ec&hm=48c9e28deac236f407125616f0041a1da5af3ac02b4f0baa7460126578ead2d4&");
+                            System.out.println(modeStats.toString());
                         }
 
 
@@ -117,7 +118,8 @@ public class osu extends ListenerAdapter {
                     MessageEmbed embed = embedOsu.build();
                     event.getHook().editOriginalEmbeds(embed).queue();
                 } else {
-                    event.getHook().editOriginal("Failed to fetch player information.").queue();
+                    event.getHook().editOriginal("Player Does Not exist on Blobsu.").queue();
+
                 }
             });
         }

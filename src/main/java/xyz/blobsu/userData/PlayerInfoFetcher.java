@@ -21,7 +21,6 @@ public class PlayerInfoFetcher {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
             String jsonData = null;
             //Change this when linking discord
@@ -31,6 +30,7 @@ public class PlayerInfoFetcher {
             return gson.fromJson(jsonData, PlayerInfoResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
+
             return null;
         }
     }

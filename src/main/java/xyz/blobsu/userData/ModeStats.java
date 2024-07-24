@@ -92,6 +92,30 @@ public class ModeStats {
         return country_rank;
     }
 
+    @Override
+    public String toString() {
+        return "ModeStats{" +
+                "id=" + id +
+                ", mode=" + mode +
+                ", tscore=" + tscore +
+                ", rscore=" + rscore +
+                ", pp=" + pp +
+                ", plays=" + plays +
+                ", playtime=" + playtime +
+                ", acc=" + acc +
+                ", max_combo=" + max_combo +
+                ", total_hits=" + total_hits +
+                ", replay_views=" + replay_views +
+                ", xh_count=" + xh_count +
+                ", x_count=" + x_count +
+                ", sh_count=" + sh_count +
+                ", s_count=" + s_count +
+                ", a_count=" + a_count +
+                ", rank=" + rank +
+                ", country_rank=" + country_rank +
+                '}';
+    }
+
     // Constructors, setters, and other utility methods can be added if needed
 }
 
