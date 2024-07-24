@@ -19,10 +19,6 @@ public class ScoreResponse {
         return scores;
     }
 
-    public void setScores(List<Score> scores) {
-        this.scores = scores;
-    }
-
     @Override
     public String toString() {
         return "ScoreResponse{" +

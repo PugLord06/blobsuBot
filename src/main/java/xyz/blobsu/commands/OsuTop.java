@@ -76,7 +76,7 @@ public class OsuTop extends ListenerAdapter {
                 if (scores.isEmpty()) {
                     event.reply("No scores found for this user.").queue();
                 } else {
-                    // Limit to 5 scores or less
+                    // Limit to 5 scores or fewer
                     List<Score> limitedScores = scores.size() > 5 ? scores.subList(0, 5) : scores;
                     MessageEmbed embed = createScoreEmbed(limitedScores, username, mode);
                     event.getHook().editOriginalEmbeds(embed).queue();

@@ -2,21 +2,12 @@ package xyz.blobsu.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import org.jetbrains.annotations.NotNull;
 import xyz.blobsu.userData.*;
-
 import java.awt.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -26,26 +17,6 @@ public class osu extends ListenerAdapter {
     private final String[] gamemodes = new String[]{"std", "taiko", "ctb", "mania", "rxStd", "rxTaiko"
             , "rxCatch", "rxMania", "autoStd", "autoTaiko", "autoCatch", "autoMania"};
 
-   /* @Override
-    public void onGuildReady(@NotNull GuildReadyEvent event) {
-        List<CommandData> commandData = new ArrayList<>();
-
-        OptionData optionName = new OptionData(OptionType.STRING, "name", "the username of the player", true);
-        commandData.add(Commands.slash("osu", "View Your osu profile!")
-                .addOptions(optionName)
-                .addOptions(
-                        new OptionData(OptionType.STRING, "mode", "Which mode stats are you looking for")
-                                .addChoice("Standard", gamemodes[0])
-                                .addChoice("Taiko", gamemodes[1])
-                                .addChoice("Catch the Beat", gamemodes[2])
-                                .addChoice("Mania", gamemodes[3])
-                                .addChoice("StandardRX", gamemodes[4])
-                                .addChoice("TaikoRX", gamemodes[5])
-                                .addChoice("Catch the beat RX", gamemodes[6])
-                                .addChoice("StandardAP", gamemodes[8])
-                ));
-        event.getGuild().updateCommands().addCommands(commandData).queue();
-    }*/
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -57,6 +28,7 @@ public class osu extends ListenerAdapter {
             OptionMapping nameOption = event.getOption("name");
             OptionMapping modeOption = event.getOption("mode");
             if (nameOption == null) {
+
                 event.reply("Please provide a valid username.").setEphemeral(true).queue();
                 return;
             } else if (modeOption == null) {
@@ -108,7 +80,7 @@ public class osu extends ListenerAdapter {
                                                     , modeStats.getPp(), modeStats.getAcc(), modeStats.getPlays(), playTime).replace(",", "."))
                                     .setTimestamp(Instant.ofEpochMilli(Long.parseLong(userLastSeen)))
                                     .setFooter("Last Seen ", iconURL);
-                            System.out.println(modeStats.toString());
+
                         }
 
 
