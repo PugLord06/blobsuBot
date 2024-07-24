@@ -21,78 +21,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class osu extends ListenerAdapter {
-
-    /*
-    @Override
-    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-
-        String command = event.getName();
-        userDescription userDetails = new userDescription();
-
-        if (command.equals("osu")) {
-            try {
-
-                OptionMapping messageOption = event.getOption("user");
-
-
-                int userID = 0;
-                if (messageOption != null) {
-                    userID = userDetails.getUserId(messageOption.getAsString());
-                    String userName = userDetails.getUserName(userID);
-                    String userURL = "https://blobsu.xyz/user/" + userID;
-                    String userCountryCode = userDetails.getCountryID(userID);
-                    String userLastSeen = userDetails.getLastSeen(userID) + "000";
-                    String flagAPI = String.format("https://flagsapi.com/%s/flat/64.png", userCountryCode.toUpperCase());
-
-                    PlayerInfoResponse response = PlayerInfoFetcher.fetchPlayerInfo(userName);
-                    assert response != null;
-                    Player player = response.getPlayer();
-                    Info playerInfo = player.getInfo();
-                    Map<String, ModeStats> stats = player.getStats();
-
-                    int userPerformancePoints = 0;
-                    double userAccuracy = 0;
-                    int userPlayCount = 0;
-                    if (userName.compareToIgnoreCase("Player not found") > 0) {
-                        System.out.println(userName);
-                        EmbedBuilder embedOsu = new EmbedBuilder()
-                                .setColor(Color.CYAN)
-                                .setThumbnail("https://a.blobsu.xyz/" + userID)
-                                .setAuthor("osu!standard profile for " + playerInfo.getName(), userURL, flagAPI)
-                                .setUrl(userURL)
-                                .setDescription(
-                                        "**Rank:** smth here (CountryCode:#1)\n" +
-                                                "**PP:** [insert pp here] **Acc:** [insert acc here]% \n" +
-                                                "**Playcount:** [playcount] \t (minutes -> hours + hrs) +\n")
-                                .setTimestamp(Instant.ofEpochMilli(Long.parseLong(userLastSeen)))
-                                .setFooter("Last Seen ",
-                                        "https://cdn.discordapp.com/attachments/1257066623899144323/1257686870322843812/discordidk.png?ex=66a0566c&is=669f04ec&hm=48c9e28deac236f407125616f0041a1da5af3ac02b4f0baa7460126578ead2d4&");
-
-                        event.replyEmbeds(embedOsu.build()).queue();
-                        System.out.println(flagAPI);
-                        System.out.println(userURL);
-                        System.out.println("https://a.blobsu.xyz/" + userID);
-                    } else {
-                        event.reply("Player not found on blobsu").queue();
-
-                    }
-                }
-
-
-            } catch (Exception e) {
-                event.reply("Something broke Blame Pug Lord").queue();
-                throw new RuntimeException(e);
-
-            }
-        }
-
-
-    }
-
-
-
-    */
-
+    
     // rxMania, and all autopilot gamemodes apart from standard are unused
     private final String[] gamemodes = new String[]{"std", "taiko", "ctb", "mania", "rxStd", "rxTaiko"
             , "rxCatch", "rxMania", "autoStd", "autoTaiko", "autoCatch", "autoMania"};
