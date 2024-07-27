@@ -20,7 +20,7 @@ public class commandLoader extends ListenerAdapter {
         List<CommandData> commandData = new ArrayList<>();
 
         OptionData userName = new OptionData(OptionType.STRING, "name", "the username of the player", true);
-        OptionData modeOption = new OptionData(OptionType.STRING, "mode", "Which mode stats are you looking for",false)
+        OptionData modeOption = new OptionData(OptionType.STRING, "mode", "Which mode stats are you looking for", false)
                 .addChoice("Standard", gamemodes[0])
                 .addChoice("Taiko", gamemodes[1])
                 .addChoice("Catch the Beat", gamemodes[2])
@@ -33,11 +33,11 @@ public class commandLoader extends ListenerAdapter {
         commandData.add(Commands.slash("osu", "View your osu profile!")
                 .addOptions(userName)
                 .addOptions(modeOption));
-        commandData.add(Commands.slash("osutop","Get your top 5 plays!")
+        commandData.add(Commands.slash("osutop", "Get your top 5 plays!")
                 .addOptions(userName)
                 .addOptions(modeOption));
 
-
         event.getGuild().updateCommands().addCommands(commandData).queue();
+        System.out.println("Succesfully Loaded commands!");
     }
 }

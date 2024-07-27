@@ -14,12 +14,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 // Add your Score and ScoreResponse models
 import org.jetbrains.annotations.NotNull;
+import xyz.blobsu.scoreData.Beatmap;
+import xyz.blobsu.scoreData.Mods;
 import xyz.blobsu.scoreData.Score;
 import xyz.blobsu.scoreData.ScoreResponse;
 import xyz.blobsu.userData.*;
@@ -40,8 +44,6 @@ public class OsuTop extends ListenerAdapter {
             if (usernameOption != null && gamemodeOption != null) {
                 String username = usernameOption.getAsString();
                 int mode = getModeNumber(gamemodeOption.getAsString());
-                System.out.println(gamemodeOption.getAsString());
-                System.out.println(mode);
                 fetchAndDisplayOsuTopScores(event, username, mode);
             } else {
                 event.reply("Please provide a valid Blobsu! username.").queue();
@@ -70,7 +72,6 @@ public class OsuTop extends ListenerAdapter {
             Gson gson = new Gson();
             ScoreResponse scoreResponse = gson.fromJson(response.toString(), ScoreResponse.class);
 
-            System.out.println(url);
             if ("success".equals(scoreResponse.getStatus())) {
                 List<Score> scores = scoreResponse.getScores();
                 if (scores.isEmpty()) {
@@ -91,34 +92,44 @@ public class OsuTop extends ListenerAdapter {
     }
 
     private MessageEmbed createScoreEmbed(List<Score> scores, String username, int mode) {
-
+        String topFivePlays = "";
         PlayerInfoResponse response = PlayerInfoFetcher.fetchPlayerInfo(username);
 
         if (response != null && response.getStatus().equals("success")) {
             EmbedBuilder embedBuilder = getEmbedBuilder(username, mode, response);
 
             String beatmapURlSkeleton = "https://osu.ppy.sh/beatmapsets/";
+            int index = 1;
 
             for (Score score : scores) {
-                int index = 1;
+
+                Beatmap beatMap = score.getBeatmap();
+                Set<Mods> activeMods = Mods.fromInt(score.getMods());
+                String modeName = "";
+                String stringScore = score.getScoreString();
+                DecimalFormat df = new DecimalFormat("0.00");
                 if (score.getMode() == mode) {
 
+                    String activeModNames = "NM";
+                    for (Mods mod : activeMods) {
+                        activeModNames = String.valueOf(mod.toString()).charAt(0) + String.valueOf(mod.toString().charAt(1));
+                        if (mod.toString().length() > 2)
+                            for (int i = 0; i < mod.toString().length(); i++) {
+                                activeModNames += String.valueOf(mod.toString().charAt(i));
+                            }
+                    }
 
-                    embedBuilder.addField(
-                             " ",
-                            "**[" + score.getBeatmap().getArtist() + " - "
-                                    + score.getBeatmap().getTitle() + "]("
-                                    +beatmapURlSkeleton + score.getBeatmap().getSet_id() + ")**\n"+
-                            "Score: " + score.getScore() + "\n" +
-                                    "PP: " + score.getPp() + "\n" +
-                                    "Accuracy: " + score.getAcc() + "%\n" +
-                                    "Combo: x" + score.getMaxCombo() + "/" + score.getBeatmap().getMaxCombo() + "\n" +
-                                    "Mods: " + score.getMods() + "\n",
-
-                            false
-                    );
+                    topFivePlays += "** " + index++ + ") [" + beatMap.getTitle() + "[" + beatMap.getVersion() + "]]("
+                            + beatmapURlSkeleton + beatMap.getId() + ") +" + score.getActiveMods(score.getMods()) + "\n"
+                            + score.getGradeEmoji() + " " + df.format(score.getPp()).replaceAll(",", ".")
+                            + "PP** • " + df.format(score.getAcc()).replaceAll(",", ".") + "% • "
+                            + score.getScoreString() + "\n [ **" + score.getMaxCombo() + "x**/" + beatMap.getMaxCombo() + "x ] • {"
+                            + score.getN300() + "/" + score.getN100() + "/" + score.getN50() + "/" + score.getNmiss() + "} • " + score.convertToDiscordTimestamp() + "\n";
                 }
+
+
             }
+            embedBuilder.setDescription(topFivePlays);
             return embedBuilder.build();
         }
 
@@ -164,7 +175,7 @@ public class OsuTop extends ListenerAdapter {
         for (int i = 0; i < gamemodes.length; i++) {
             if (gamemode.equalsIgnoreCase(gamemodes[i])) {
                 result = i;
-                System.out.println(result);
+
             }
         }
         return result;

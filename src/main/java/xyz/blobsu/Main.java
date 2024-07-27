@@ -24,8 +24,8 @@ public class Main {
     public Main() throws LoginException {
         Dotenv dotenv = Dotenv.load();
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dotenv.get("DISCORD_TOKEN"));
-        builder.setStatus(OnlineStatus.DO_NOT_DISTURB);
-        builder.setActivity(Activity.watching(" over Blobsu"));
+        builder.setStatus(OnlineStatus.IDLE);
+        builder.setActivity(Activity.customStatus("Try break me "));
         builder.enableIntents(GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_PRESENCES);
         builder.setMemberCachePolicy(MemberCachePolicy.ALL);
         builder.enableCache(CacheFlag.ONLINE_STATUS);

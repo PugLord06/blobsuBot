@@ -1,8 +1,17 @@
 package xyz.blobsu.scoreData;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.Set;
+
 public class Score {
     private int id;
-    private long score;
+    private int score;
     private int combo;
     private double acc;
     private int n300;
@@ -15,12 +24,13 @@ public class Score {
     private int rank;
     private int completed;
     private long max_combo;
-    private long mods;
-    private long playTime;
+    private int mods;
+    private String play_time;
     private long playMode;
     private int mode;
     private int passed;
     private long totalHits;
+    private String grade;
     private Beatmap beatmap;
 
     public int getId() {
@@ -31,11 +41,11 @@ public class Score {
         this.id = id;
     }
 
-    public long getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(long score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
@@ -135,20 +145,12 @@ public class Score {
         this.max_combo = max_combo;
     }
 
-    public long getMods() {
+    public int getMods() {
         return mods;
     }
 
-    public void setMods(long mods) {
+    public void setMods(int mods) {
         this.mods = mods;
-    }
-
-    public long getPlayTime() {
-        return playTime;
-    }
-
-    public void setPlayTime(long playTime) {
-        this.playTime = playTime;
     }
 
     public long getPlayMode() {
@@ -201,7 +203,7 @@ public class Score {
                 ", completed=" + completed +
                 ", max_combo=" + max_combo +
                 ", mods=" + mods +
-                ", playTime=" + playTime +
+                ", playTime=" + play_time +
                 ", playMode=" + playMode +
                 ", passed=" + passed +
                 ", totalHits=" + totalHits +
@@ -215,5 +217,83 @@ public class Score {
 
     public void setMode(int mode) {
         this.mode = mode;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public String getGradeEmoji() {
+        return switch (grade) {
+            case "XH" -> "<:XH_:1265443313583128680>";
+            case "X" -> "<:X_:1265443296306663494>";
+            case "SH" -> "<:SH_:1265443272030158941>";
+            case "S" -> "<:S_:1265443255588229242>";
+            case "A" -> "<:A_:1265443137560510534>";
+            case "B" -> "<:B_:1265443157508751370>";
+            case "C" -> "<:C_:1265443173048516648>";
+            case "D" -> "<:D_:1265443188810711113>";
+            default -> "<:F_:1265443204979888149>";
+        };
+
+
+    }
+
+    public String getScoreString() {
+        return String.format(Locale.US, "%,d", score);
+    }
+
+    public String convertToDiscordTimestamp() throws DateTimeParseException {
+        // Parse the date-time string to LocalDateTime
+        LocalDateTime localDateTime = LocalDateTime.parse(play_time);
+
+        // Convert to ZonedDateTime with the specified timezone
+        ZonedDateTime zonedDateTime = localDateTime.atZone(ZoneId.of("UTC"));
+
+        // Convert to an Instant
+        Instant instant = zonedDateTime.toInstant();
+
+        // Get the epoch time in seconds
+        long epochSeconds = instant.getEpochSecond();
+
+        // Return the Discord timestamp string
+        return "<t:" + epochSeconds + ":R>";
+    }
+
+    public String getPlay_time() {
+        return play_time;
+    }
+
+    public void setPlay_time(String play_time) {
+        this.play_time = play_time;
+    }
+
+    public String getActiveMods(int bitmask) {
+        String mods = "";
+        Set<Mods> activeModsSet = EnumSet.noneOf(Mods.class);
+
+        for (Mods mod : Mods.values()) {
+            if ((bitmask & mod.getValue()) != 0) {
+                activeModsSet.add(mod);
+                mods += mod;
+
+            }
+
+        }
+        if (mods.contains("NC")) {
+            mods = mods.replaceAll("NC", "");
+
+        }
+
+        if (activeModsSet.isEmpty()) {
+            return Mods.NM.name();
+        }
+
+
+        return mods;
     }
 }
